@@ -10,14 +10,31 @@ Bind your react component props to Craft's [element api](https://github.com/pixe
 Since we are using redux to manage our store we need to configure the provider on our top level component
 ```
 import { configureStore } from 'craft-react'
+import { syncReduxAndRouter } from 'redux-simple-router'
+import createBrowserHistory from 'history/lib/createBrowserHistory'
+import { Router } from 'react-router'
+import Post from './components/Post'
+import PostList from './components/PostList'
+
+
 
 const store = configureStore()
+const history = createBrowserHistory()
+syncReduxAndRouter(history, store)
+
+const routes = (
+    <Route path='/' component='PostList'>
+    <Route path='/post/:slug' component='Post'>
+)
 
 ReactDOM.render((
   <Provider store={ store }>
-    <PostComponent />
+    <Router
+      history={history}
+      routes={routes}
+      />
   </Provider>
-), rootNode
+), rootNode)
 ```
 
 ## Example
@@ -50,7 +67,7 @@ At a front-end endpoint of `mysupercoolblog.com/post/a-post-slug`
 import React, { Component } from 'react';
 import loadContent from 'craft-react'
 
-class PostComponent extends Component {
+class Post extends Component {
   constructor(props) {
     super(props)
   }
@@ -64,7 +81,7 @@ class PostComponent extends Component {
   }
 }
 
-export default loadContent()(PostComponent)
+export default loadContent()(Post)
 ```
 
 If the craft endpoints don't align with the front-end endpoints the `contentType` and the `slug` can be passed to the `loadContent` method
@@ -72,7 +89,7 @@ If the craft endpoints don't align with the front-end endpoints the `contentType
 import React, { Component } from 'react';
 import loadContent from 'craft-react'
 
-class PostComponent extends Component {
+class Post extends Component {
   constructor(props) {
     super(props)
   }
@@ -86,7 +103,7 @@ class PostComponent extends Component {
   }
 }
 
-export default loadContent('post', 'a-post-slug')(PostComponent)
+export default loadContent('post', 'a-post-slug')(Post)
 ```
 
 ### Multiple entities
