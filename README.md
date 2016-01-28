@@ -5,6 +5,21 @@ Bind your react component props to Craft's [element api](https://github.com/pixe
 ## Installation
 `npm i --save craft-react`
 
+
+## Config
+Since we are using redux to manage our store we need to configure the provider on our top level component
+```
+import { configureStore } from 'craft-react'
+
+const store = configureStore()
+
+ReactDOM.render((
+  <Provider store={ store }>
+    <PostComponent />
+  </Provider>
+), rootNode
+```
+
 ## Example
 
 ### Single entity with slug
